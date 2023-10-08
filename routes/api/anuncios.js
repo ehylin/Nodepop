@@ -32,7 +32,7 @@ router.get('/anuncios', async (req, res, next) => {
   
       const anuncios = await Anuncio.find(filters).limit(Number(req.query.limit)).skip(Number(req.query.start)).sort(req.query.sort);
   
-      res.json({ title: 'Anuncios', anuncios });
+      res.render('index', { title: 'Anuncios', anuncios });
     } catch (err) {
       next(err);
     }
@@ -43,7 +43,7 @@ router.get('/anuncios', async (req, res, next) => {
 
         const tags = await Anuncio.distinct('tags');
 
-        res.json({ title: 'Tags disponibles', tags });
+        res.render('index', { title: 'Tags', tags });
     } catch (err) {
         next(err);
     }
@@ -61,7 +61,7 @@ router.post('/anuncios', async (req, res, next) => {
         const anuncioGuardado = await anuncio.save();
         
         res.json({ result: anuncioGuardado });
-
+  
     } catch (err) {
         next(err);
     }
@@ -73,7 +73,7 @@ router.delete('/:id', async (req, res, next) => {
   
       await Anuncio.deleteOne({ _id: id });
   
-      res.json({ message: `Anuncio con ID ${id} eliminado exitosamente.` });
+      res.redirect('/');
     } catch (err) {
       next(err);
     }
