@@ -8,16 +8,44 @@
     <h1><%= title %></h1>
     <p>Lista de <%= title %></p>
     <div>
-      <ul>
-        <% anuncios.forEach(anuncio => { %>
-          <li>
-            <h2><%= anuncio.nombre %></h2>
-            <img src="/images/anuncios/<%= anuncio.foto %>" alt="<%= anuncio.nombre %>">
-            <p>Precio: <%= anuncio.precio %></p>
-            <p>Tags: <%= anuncio.tags.join(', ') %></p>
-          </li>
-        <% }) %>
-        </ul> 
+      <% if (anuncios.length === 0) { %>
+        <p>No se encontraron anuncios con los filtros seleccionados.</p>
+      <% } else { %>
+        <ul>
+            <% anuncios.forEach(anuncio => { %>
+                <li>
+                    <h2><%= anuncio.nombre %></h2>
+                    <img src="/images/anuncios/<%= anuncio.foto %>" alt="<%= anuncio.nombre %>">
+                    <p>Precio: <%= anuncio.precio %></p>
+                    <p>Tags: <%= anuncio.tags.join(', ') %></p>
+                </li>
+            <% }) %>
+        </ul>
+      <% } %>
     </div>
+    <form action="/anuncios" method="get">
+      <label for="start">Comenzar:</label>
+      <input type="number" name="start" id="start" value="<%= req.query.start || '' %>">
+      
+      <label for="limit">Limite:</label>
+      <input type="number" name="limit" id="limit" value="<%= req.query.limit || '' %>">
+  
+      <label for="sort">Ordenar por:</label>
+      <select name="sort" id="sort">
+          <option value="name" <%= req.query.sort === 'name' ? 'selected' : '' %>>Nombre</option>
+          <option value="price" <%= req.query.sort === 'price' ? 'selected' : '' %>>Precio</option>
+      </select>
+  
+      <label for="tag">Tag:</label>
+      <select name="tag" id="tag">
+          <option value="lifestyle" <%= req.query.tag === 'lifestyle' ? 'selected' : '' %>>Lifestyle</option>
+          <option value="motor" <%= req.query.tag === 'motor' ? 'selected' : '' %>>Motor</option>
+          <option value="work" <%= req.query.tag === 'work' ? 'selected' : '' %>>Trabajo</option>
+          <option value="mobile" <%= req.query.tag === 'mobile' ? 'selected' : '' %>>Móvil</option>
+      </select>
+  
+      <input type="submit" value="Aplicar Filtros">
+  </form>
+  
   </body>
 </html>

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Anuncio = require('../../models/Anuncio');
 
-router.get('/apiv1/anuncios', async (req, res, next) => {
+router.get('/anuncios', async (req, res, next) => {
     try {
       const filters = {};
   
@@ -32,10 +32,53 @@ router.get('/apiv1/anuncios', async (req, res, next) => {
   
       const anuncios = await Anuncio.find(filters).limit(Number(req.query.limit)).skip(Number(req.query.start)).sort(req.query.sort);
   
-      res.json(anuncios);
+      res.json({ title: 'Anuncios', anuncios });
     } catch (err) {
       next(err);
     }
   });
+
+  router.get('/tags', async (req, res, next) => {
+    try {
+
+        const tags = await Anuncio.distinct('tags');
+
+        res.json({ title: 'Tags disponibles', tags });
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.post('/anuncios', async (req, res, next) => {
+    try {
+        const { nombre, tags, precio, venta, foto } = req.body;
+        
+        if (!nombre || !tags || !precio || typeof venta !== 'boolean' || !foto) {
+            return res.status(400).json({ error: 'Datos de entrada no válidos' });
+        }
+
+        const anuncio = new Anuncio({ nombre, tags, precio, venta, foto });
+        const anuncioGuardado = await anuncio.save();
+        
+        res.json({ result: anuncioGuardado });
+
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.delete('/:id', async (req, res, next) => {
+    try {
+      const id = req.params.id;
+  
+      await Anuncio.deleteOne({ _id: id });
+  
+      res.json({ message: `Anuncio con ID ${id} eliminado exitosamente.` });
+    } catch (err) {
+      next(err);
+    }
+  })
+
+
   
   module.exports = router;
