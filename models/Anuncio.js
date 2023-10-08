@@ -8,8 +8,6 @@ const anuncioSchema = new mongoose.Schema({
     tags: [String]
 });
 
-const Agente = mongoose.model('Anuncio', anuncioSchema);
-
-
-module.exports = Agente;
+const Anuncio = mongoose.model('Anuncio', anuncioSchema);
+module.exports = Anuncio;
 
