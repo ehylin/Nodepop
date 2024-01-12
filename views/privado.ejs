@@ -1,0 +1,54 @@
+<% include cabecera.ejs %>
+  <!-- Basic features section-->
+  <section class="bg-light">
+    <div class="container px-5">
+
+        <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+            <div class="col-12 col-lg-5">
+                <h2 class="display-4 lh-1 mb-4"><%= __('Private zone') %></h2>
+            </div>
+            <div class="col-12 col-lg-5">
+                <p>User: <%= email %></p>
+            </div>
+        </div>
+
+        <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+            <div class="col-12 col-lg-12">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col" style="width: 10%;">#</th>
+                        <th scope="col">Agent</th>
+                        <th scope="col" style="width: 10%;">Age</th>
+                        <th scope="col" style="width: 10%;"><a href="/anuncios-new">New agent</a></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% anuncios.forEach( anuncio => { %>
+                        <tr>
+                            <th scope="row"><%= anuncio._id %></th>
+                            <td><%= anuncio.name %></td>
+                            <td><%= anuncio.age  %></td>
+                            <td><a
+                                onclick="confirmDeleteAgent('<%= anuncio.name %>', '<%= anuncio._id %>')"
+                                href="javascript:void(0);">
+                                    <i class="bi bi-trash"></i>
+                            </a></td>
+                        </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function confirmDeleteAgent(name, anuncioId) {
+        if (confirm(`Estas seguro que quieres eliminar el anuncio ${name}?`)) {
+            window.location.href = `/anuncios-delete/${anuncioId}`;
+        }
+    }
+</script>
+
+<% include pie.ejs %>
