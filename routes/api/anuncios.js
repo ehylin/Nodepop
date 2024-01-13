@@ -14,8 +14,6 @@ const upload = require('../../lib/uploadConfigure');
  */
 
 router.get('/', async (req, res, next) => {
-
-
     try {
 
       const usuarioIdLogado = req.usuarioLogadoAPI;
@@ -88,6 +86,7 @@ router.post('/', async (req, res, next) => {
     const usuarioIdLogado = req.usuarioLogadoAPI;
 
     console.log(req.file);
+    const imagePath = req.file.filename;
 
     // creamos una instancia de snuncio en memoria
     const anuncio = new Anuncio(anuncioData);
@@ -96,6 +95,11 @@ router.post('/', async (req, res, next) => {
 
     // la persistimos en la BD
     const anuncioGuardado = await anuncio.save();
+
+     // Creando un thumbnail
+     const thumbnailPath = imagePath.replace('.jpg', '_thumbnail.jpg');
+     const image = await jimp.read(imagePath);
+     image.resize(100, 100).write(thumbnailPath);
 
     res.json({ result: anuncioGuardado });
 
