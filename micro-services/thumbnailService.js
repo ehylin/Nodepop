@@ -10,8 +10,8 @@ responder.on('generateThumbnail', async (req, done) => {
   const { imagePath, thumbnailPath } = req;
 
   try {
-    const image = await jimp.read(imagePath);
-    image.resize(100, 100).write(thumbnailPath);
+    const thumbnail = await jimp.read(imagePath);
+    thumbnail.resize(100, 100).write(thumbnailPath);
 
     done(null, thumbnailPath);
   } catch (error) {
